@@ -1,0 +1,12 @@
+# LangChain and LangGraph for agent orchestration
+langchain>=0.1.0
+langgraph>=0.0.40
+langchain-anthropic>=0.1.0
+langchain-openai>=0.0.5
+
+# Utilities
+python-dotenv>=1.0.0
+pydantic>=2.0.0
+
+# Optional: for better output formatting
+rich>=13.0.0

@@ -1,0 +1,17 @@
+# Virtual Environment
+venv/
+env/
+*.pyc
+__pycache__/
+
+# Environment variables
+.env
+
+# Output files (optional - you may want to commit these to see results)
+output/*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
