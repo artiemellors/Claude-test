@@ -96,24 +96,13 @@ def test_periodization():
         for phase in periodization_plan["phases"]:
             console.print(f"\n  [bold]Phase {phase.get('phaseNumber')}: {phase.get('phaseName')}[/bold]")
             console.print(f"    Weeks: {phase.get('startWeek')}-{phase.get('endWeek')}")
-            console.print(f"    Focus: {phase.get('focus')}")
-            console.print(f"    Intensity: {phase.get('intensityGuideline')}")
+            console.print(f"    Focus: {phase.get('phaseFocus', 'N/A')}")
+            console.print(f"    Progression: {phase.get('primaryProgressionFocus', 'N/A')}")
 
-            if "sessionGuidelines" in phase:
-                console.print(f"    Session Guidelines:")
-                guidelines = phase["sessionGuidelines"]
-
-                if "runningQuality" in guidelines:
-                    run_guide = guidelines["runningQuality"]
-                    console.print(f"      - Running: {run_guide.get('intensityRange')} ({', '.join(run_guide.get('focusTypes', []))})")
-
-                if "maxStrength" in guidelines:
-                    str_guide = guidelines["maxStrength"]
-                    console.print(f"      - Strength: {str_guide.get('repRange')} @ {str_guide.get('loadRange')}")
-
-                if "hyroxCombo" in guidelines:
-                    combo_guide = guidelines["hyroxCombo"]
-                    console.print(f"      - HYROX Combo: {combo_guide.get('frequency')}, {combo_guide.get('format')}")
+            if "selectedArchetypes" in phase:
+                console.print(f"    Selected Archetypes ({len(phase['selectedArchetypes'])} total):")
+                for archetype in phase["selectedArchetypes"]:
+                    console.print(f"      - {archetype.get('archetypeName')} ({archetype.get('sessionRole', 'N/A')}): {archetype.get('frequency', 'N/A')}")
 
     return periodization_plan, global_context
 
