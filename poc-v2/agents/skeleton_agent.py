@@ -12,8 +12,9 @@ class SkeletonAgent(BaseAgent):
 
 YOUR ROLE:
 - Create a weekly skeleton showing WHAT session types go on WHICH days
-- Consider recovery patterns, available days, and phase focus
-- Ensure hard/easy alternation
+- Use the archetype scheduling guidance from the periodization plan
+- Consider recovery patterns, available days, and intensity balance
+- Ensure proper session separation based on intensity
 - Do NOT design actual workouts (that's for specialist coaches)
 
 INPUT FORMAT:
@@ -27,41 +28,85 @@ INPUT FORMAT:
   "currentPhase": {
     "phaseNumber": 1,
     "phaseName": "Base Building",
-    "focus": "aerobic_base + foundational_strength_endurance",
-    "sessionGuidelines": { ... }
+    "phaseFocus": "Aerobic foundation & movement quality",
+    "selectedArchetypes": [
+      {
+        "archetypeName": "Zone 2 Aerobic",
+        "category": "Running",
+        "priority": "High",
+        "sessionRole": "Easy - primary aerobic development"
+      },
+      {
+        "archetypeName": "Maximal Strength",
+        "category": "Strength",
+        "priority": "High",
+        "sessionRole": "Hard - strength foundation"
+      },
+      ...
+    ],
+    "archetypeSchedulingGuidance": {
+      "priorityDistribution": {
+        "highPriority": ["Zone 2 Aerobic", "Maximal Strength", ...],
+        "mediumPriority": [...],
+        "lowPriority": [...]
+      },
+      "intensityBalance": {
+        "hardSessions": ["Maximal Strength"],
+        "moderateSessions": ["Station Practice"],
+        "easySessions": ["Zone 2 Aerobic", "Mobility/Flexibility"]
+      },
+      "sessionAllocationGuidance": {
+        "3daysPerWeek": "...",
+        "4daysPerWeek": "...",
+        "5daysPerWeek": "2x Zone 2, 2x Maximal Strength, 1x Station Practice...",
+        "6daysPerWeek": "..."
+      },
+      "separationRules": {
+        "maxStrengthSeparation": "48hrs apart minimum",
+        ...
+      }
+    }
   },
-  "trainingConfiguration": {
+  "trainingConfig": {
     "sessionsPerWeek": 5,
     "availableDays": ["tuesday", "wednesday", "thursday", "saturday", "sunday"]
   }
 }
 
-WEEKLY STRUCTURE RULES:
-1. Base Phase (5 sessions/week):
-   - 2x Running Quality (Zone 2, easy pace)
-   - 2x Strength Endurance (station work)
-   - 1x HYROX Combo (optional, light)
+YOUR TASK:
+1. Read the sessionAllocationGuidance for the provided sessionsPerWeek
+2. Map archetypes to session types:
+   - Zone 2 Aerobic, Long Run, Recovery Run, Tempo Steady State → "runningQuality"
+   - Threshold Intervals, VO2max Intervals, Fartlek → "runningQuality"
+   - Maximal Strength, Explosive Power → "maxStrength"
+   - Strength Endurance → "strengthEndurance"
+   - Station Practice, EMOM/AMRAP, Run-Station Brick, Hyrox Simulation → "stationPractice" or "hyroxCombo"
+   - Mobility/Flexibility → "mobility" (can be included as notes, not full session)
 
-2. Build Phase (5 sessions/week):
-   - 2x Running Quality (threshold, tempo)
-   - 1x Max Strength
-   - 1x Strength Endurance (higher intensity)
-   - 1x HYROX Combo (race-pace)
+3. Allocate sessions across available days following:
+   - Use sessionAllocationGuidance to determine how many of each archetype
+   - Follow separationRules (e.g., "48hrs apart" for hard sessions)
+   - Follow intensityBalance (don't put hard + hard consecutive)
+   - Weekends often better for longer sessions
 
-3. Peak Phase (5 sessions/week):
-   - 2x Running Quality (VO2, race pace)
-   - 1x Max Strength (low volume)
-   - 2x HYROX Combo (full simulations)
+4. Create progressive structure across weeks:
+   - Week 1: Introduction to patterns
+   - Weeks 2-4: Progressive volume/intensity
+   - Week 5: Peak week (if not deload)
+   - Week 6 (or last week): Deload if specified in phase
 
-4. Taper Phase (3 sessions/week):
-   - 1x Running Quality (short, sharp)
-   - 1x Max Strength (maintenance)
-   - 1x HYROX Combo (light)
+SESSION TYPE MAPPING GUIDE:
+- "runningQuality": All running archetypes (Zone 2, Threshold, VO2, Tempo, Long Run, etc.)
+- "maxStrength": Maximal Strength, Explosive Power archetypes
+- "strengthEndurance": Strength Endurance archetype
+- "stationPractice": Station Practice, technical work
+- "hyroxCombo": Run-Station Brick, Hyrox Simulation, EMOM/AMRAP with running
 
-ALTERNATION RULES:
-- Never schedule hard running + hard strength on consecutive days
-- Separate high-intensity sessions by 48 hours minimum
-- Use available days wisely (weekends often better for longer sessions)
+INTENSITY SEPARATION RULES:
+- Hard sessions (check intensityBalance.hardSessions): 48+ hours apart minimum
+- Hard + moderate: 24+ hours recommended
+- Easy sessions: Can be consecutive or adjacent to hard sessions
+- Use rest days strategically around hardest sessions
 
 OUTPUT FORMAT (JSON only):
 {

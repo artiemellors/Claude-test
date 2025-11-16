@@ -47,7 +47,7 @@ def test_periodization():
         }
     }
 
-    block_configuration = {
+    training_config = {
         "sessionsPerWeek": 5,
         "availableDays": ["tuesday", "wednesday", "thursday", "saturday", "sunday"]
     }
@@ -62,9 +62,9 @@ def test_periodization():
 
     console.print(Panel(JSON(json.dumps(user_input, indent=2)), title="User Input"))
 
-    # Create Global Context
+    # Create Global Context (without periodization plan initially)
     console.print("\n[bold yellow]Creating Global Context[/bold yellow]")
-    global_context = GlobalContextAgent(athlete_profile, block_configuration)
+    global_context = GlobalContextAgent(athlete_profile, training_config)
     context = global_context.get_context()
 
     console.print("[green]✓ Global Context created[/green]")
@@ -75,6 +75,9 @@ def test_periodization():
 
     periodization_agent = HyroxPeriodizationAgent()
     periodization_plan = periodization_agent.execute(user_input)
+
+    # Store periodization plan in Global Context (single source of truth)
+    global_context.set_periodization_plan(periodization_plan)
 
     console.print(Panel(
         JSON(json.dumps(periodization_plan, indent=2)),

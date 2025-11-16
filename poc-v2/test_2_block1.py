@@ -74,17 +74,19 @@ def test_block1():
         }
     }
 
-    block_configuration = {
+    training_config = {
         "sessionsPerWeek": 5,
         "availableDays": ["tuesday", "wednesday", "thursday", "saturday", "sunday"]
     }
 
-    # Create Global Context
-    global_context = GlobalContextAgent(athlete_profile, block_configuration)
-    console.print("[green]✓ Global Context created[/green]")
+    # Create Global Context with periodization plan as single source of truth
+    global_context = GlobalContextAgent(athlete_profile, training_config, periodization_plan)
+    console.print("[green]✓ Global Context created with periodization plan[/green]")
 
     # Step 1: Create skeleton (weekly structure)
     console.print("\n[bold yellow]Step 1: Creating Weekly Skeleton[/bold yellow]")
+
+    # Skeleton Agent queries GlobalContext for what it needs
     skeleton_input = {
         "blockDetails": {
             "blockNumber": 1,
@@ -92,8 +94,11 @@ def test_block1():
             "endWeek": base_phase["endWeek"],
             "durationWeeks": base_phase["durationWeeks"]
         },
-        "currentPhase": base_phase,
-        "trainingConfiguration": block_configuration
+        "currentPhase": base_phase,  # Still pass phase for now (can optimize later)
+        "trainingConfig": {
+            "sessionsPerWeek": global_context.get_sessions_per_week(),
+            "availableDays": global_context.get_available_days()
+        }
     }
 
     skeleton_agent = SkeletonAgent()
