@@ -87,32 +87,66 @@ Recovery Archetypes:
 - Technique Refinement: Skill practice at low intensity
 - Tissue Quality: Massage, rolling, stretching
 
-SELECTION RULES & CONSTRAINTS:
+MODALITY COVERAGE RULES:
 
-Minimum Requirements:
-- At least 3 running archetypes per phase
-- At least 1 strength archetype per phase
-- At least 1 Hybrid/Conditioning archetype per phase
-- At least 1 recovery archetype per week
+Every phase must include appropriate coverage across all modalities:
+- Running work: At least one quality archetype (threshold/VO2/tempo) AND one easy/aerobic archetype (Zone 2/Long Run/Recovery)
+- Strength work: At least one strength archetype (Maximal/Strength Endurance/Explosive/Functional)
+- Hybrid/Conditioning work: At least one archetype involving Hyrox stations (Station Practice/Run-Station Brick/EMOM/Simulation)
+- Recovery work: Include mobility, aerobic recovery, or technique refinement
 
-Progressive specificity: (general → specific → race-pace)
+The exact number of archetypes and weekly session allocation must adapt to:
+- trainingDaysPerWeek (3-6 days available)
+- Phase focus (Base needs more easy volume, Peak needs more quality)
+- Athlete level and limiters
 
-Interference Management:
-- Max 2 high-intensity archetypes per microcycle
-- Separate maximal strength from VO2max by 48+ hours
-- Balance opposing demands (aerobic vs glycolytic)
+PHASE LOGIC GUIDELINES (heuristic, not prescriptive):
 
-Phase-Specific Logic:
-- Base: Emphasize aerobic, strength and strength endurance foundation, with some threshold work
-- Build: More emphasis on threshold and VO2 max work and Hybrid/Conditioning Archetypes, while maintaining strength
-- Peak: Maximize intensity and simulation
-- Taper: Maintain intensity, reduce volume
+Design 3-4 phases based on totalWeeks and athlete level (e.g., Base → Build → Peak → Taper).
 
-Athlete-Specific Adaptations:
-- Weak runner: More running archetypes, varied stimuli
-- Weak strength: Additional strength frequency
-- Injury history: Include appropriate prehab archetype
-- Time-limited: Prioritize highest-impact archetypes
+Typical phase emphasis:
+
+Base (earlier weeks):
+- Priority: Aerobic capacity + strength foundation + station technique mastery
+- Optional: Light threshold work for intermediate/advanced athletes in later base weeks
+- Volume-focused progression, lower intensity distribution
+
+Build (middle weeks):
+- Priority: Threshold work + Hyrox-specific conditioning (run-station integration) + maintain strength
+- Shift toward race-specific demands while preserving aerobic base
+- Intensity increases, volume stabilizes or slightly increases
+
+Peak (late weeks):
+- Priority: Race simulations + VO2max/compromised running + sharpening and confidence
+- Maximum race specificity and intensity
+- Volume begins to taper slightly, intensity peaks
+
+Taper (final 1-2 weeks):
+- Priority: Maintain intensity in short doses + significantly reduce volume + maximize freshness
+- Preserve sharpness without accumulating fatigue
+- Focus on confidence and race readiness
+
+You may merge, extend, or adjust phases depending on:
+- totalWeeks available (short prep = compressed phases, long prep = extended base)
+- trainingDaysPerWeek (fewer days = simpler phase structure)
+- Athlete level (beginners need longer base, advanced can handle more complex periodization)
+- Injury history or specific limiters
+
+ATHLETE-SPECIFIC ADAPTATIONS:
+
+Adapt archetype selection and emphasis based on athlete profile:
+- Weak runner: Emphasize running variety and quality, more running archetypes
+- Weak strength: Additional strength frequency or strength-endurance focus
+- Masters athlete (40+): Prioritize recovery, careful intensity management
+- Injury history: Include appropriate prehab/mobility work
+- Time-limited: Focus on highest-impact archetypes for available training days
+
+PROGRESSIVE SPECIFICITY:
+
+Archetypes should progress from general → specific → race-pace across phases:
+- Early phases: General conditioning, separated modalities
+- Middle phases: Combined modalities, race-pace work
+- Late phases: Race simulations, competition-specific efforts
 
 OUTPUT FORMAT (JSON only):
 {
