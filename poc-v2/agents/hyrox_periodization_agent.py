@@ -129,6 +129,41 @@ OUTPUT FORMAT (JSON only):
     "periodizationModel": "Linear periodization with extended base phase for 41-year-old masters athlete to build foundation before intensity"
   },
 
+  "raceTargets": {
+    "targetFinishTime": "1:20:00",
+    "targetRunPace": "5:00/km average (8km total)",
+    "targetStationSplits": {
+      "skierg": "4:00-4:30 for 1000m",
+      "sledPush": "Sub 2:00 for 50m",
+      "sledPull": "Sub 2:30 for 50m",
+      "wallBalls": "Sub 5:00 for 100 reps"
+    },
+    "pacingStrategy": "Conservative start, build through middle stations, finish strong"
+  },
+
+  "sessionGenerationRules": {
+    "progressionConstraints": {
+      "weeklyVolumeIncrease": "5-10% maximum",
+      "intensityProgression": "One variable at a time (volume OR intensity OR density)",
+      "deloadReduction": "40-50% volume reduction, maintain some intensity"
+    },
+    "sessionStructure": {
+      "qualitySession": "Primary training stimulus, higher intensity, full recovery, key phase objective",
+      "supportingSession": "Complementary to quality work, moderate intensity, maintains fitness",
+      "recoverySession": "Active recovery or technique focus, low intensity, promotes adaptation"
+    },
+    "blockDesign": {
+      "mainBlock": "Primary training stimulus (intervals, heavy strength, race simulation)",
+      "supportingBlock": "Complementary work that doesn't interfere",
+      "transitionBlock": "Bridge between main and supporting, moderate intensity"
+    },
+    "intensityFluctuation": {
+      "hardDays": "Maximum 2 per week, separated by 48+ hours",
+      "easyDays": "Active recovery or low-intensity work",
+      "moderateDays": "Threshold of steady-state efforts"
+    }
+  },
+
   "phases": [
     {
       "phaseNumber": 1,
@@ -149,106 +184,75 @@ OUTPUT FORMAT (JSON only):
           "archetypeName": "Zone 2 Aerobic",
           "category": "Running",
           "frequency": "2x/week",
+          "sessionRole": "Quality - primary aerobic development",
           "rationaleForSelection": "Critical for 41-year-old athlete to build aerobic base before intensity. Foundation for all subsequent work.",
-          "intensityGuidelines": "HR 113-131 (60-70% max), conversational pace",
-          "volumeProgression": "Week 1: 45min → Week 6: 75min (+10% weekly)",
+          "intensityBand": "Zone 2 (60-70% max HR)",
+          "progressionFocus": "Volume increase (duration +5-10% per week)",
           "keyFocusPoints": [
-            "Nasal breathing where possible",
-            "Disciplined pacing",
-            "Build aerobic engine"
-          ],
-          "integrationNotes": "Schedule on Tuesday/Thursday, separate from hard strength by 24hrs minimum"
-        },
-        {
-          "archetypeName": "Tempo Steady State",
-          "category": "Running",
-          "frequency": "1x/week",
-          "rationaleForSelection": "Introduce threshold work gradually while maintaining aerobic focus",
-          "intensityGuidelines": "HR 145-160 (70-80%), pace ~5:00-5:15/km",
-          "volumeProgression": "Week 1: 20min → Week 6: 35min",
-          "keyFocusPoints": [
-            "Sustainable discomfort",
-            "Rhythm and form",
-            "Prep for threshold intervals in Build"
-          ],
-          "integrationNotes": "Weekend session when time allows"
+            "Conversational pace discipline",
+            "Build aerobic enzyme capacity",
+            "Establish running volume tolerance"
+          ]
         },
         {
           "archetypeName": "Maximal Strength",
           "category": "Strength",
           "frequency": "2x/week",
+          "sessionRole": "Quality - foundational strength building",
           "rationaleForSelection": "Build foundational strength for Hyrox demands (sled push/pull, carries). Masters athlete needs strength work for injury prevention.",
-          "intensityGuidelines": "6-10 reps @ 65-75% 1RM, focus on quality",
-          "volumeProgression": "Week 1: 4x8 → Week 6: 5x10 (volume build)",
+          "intensityBand": "6-10 reps @ 65-75% 1RM",
+          "progressionFocus": "Volume increase (sets/reps), then load",
           "keyFocusPoints": [
             "Movement quality over load",
-            "Posterior chain emphasis",
-            "Hip hinge patterns"
-          ],
-          "integrationNotes": "Tuesday/Saturday, minimum 48hrs between sessions, 6+ hours from hard running"
+            "Posterior chain emphasis (deadlifts, squats)",
+            "Hip hinge patterns for sleds"
+          ]
         },
         {
           "archetypeName": "Station Practice",
           "category": "Hybrid/Conditioning",
           "frequency": "2x/week",
+          "sessionRole": "Supporting - technical development",
           "rationaleForSelection": "Learn Hyrox station techniques while building work capacity. Separated from running to avoid interference.",
-          "intensityGuidelines": "60-70% effort, generous rest (1:1 or 1:2 work:rest)",
-          "volumeProgression": "Week 1: 3 rounds → Week 6: 5 rounds",
+          "intensityBand": "60-70% effort, generous rest",
+          "progressionFocus": "Increase rounds, add stations gradually",
           "keyFocusPoints": [
-            "Perfect technique",
-            "Station familiarization",
-            "Basic work capacity"
-          ],
-          "integrationNotes": "Keep separate from running - no combined work yet. Focus: SkiErg, Wall Balls, Rowing"
-        },
-        {
-          "archetypeName": "Run-Station Brick",
-          "category": "Hybrid/Conditioning",
-          "frequency": "1x/week",
-          "rationaleForSelection": "Gentle introduction to combined demands without race intensity",
-          "intensityGuidelines": "65-75% effort, SEPARATED format (run, rest 8-10min, then stations)",
-          "volumeProgression": "Week 1: 1km run + 2 stations → Week 6: 1.5km run + 3 stations",
-          "keyFocusPoints": [
-            "Transition awareness",
-            "Running on pre-fatigued legs (mental prep)",
-            "Build confidence with combined work"
-          ],
-          "integrationNotes": "Sunday session, low-stress introduction to Hyrox-specific demands"
+            "Perfect technique on all 8 stations",
+            "Equipment familiarization",
+            "Basic work capacity without fatigue"
+          ]
         },
         {
           "archetypeName": "Mobility/Flexibility",
           "category": "Recovery",
-          "frequency": "Daily (10min)",
-          "rationaleForSelection": "Masters athlete needs consistent mobility work for injury prevention and movement quality",
-          "intensityGuidelines": "Low intensity, focus on hips, thoracic spine, shoulders",
-          "volumeProgression": "Consistent 10min daily",
+          "frequency": "Daily",
+          "sessionRole": "Recovery - injury prevention and movement quality",
+          "rationaleForSelection": "Masters athlete requires consistent mobility work for injury prevention and movement quality.",
+          "intensityBand": "Low intensity",
+          "progressionFocus": "Consistent practice, target weak areas",
           "keyFocusPoints": [
-            "Hip mobility for running",
-            "Shoulder health for stations",
-            "Morning routine"
-          ],
-          "integrationNotes": "Non-negotiable daily practice"
+            "Hip mobility for running stride",
+            "Shoulder health for overhead/carrying work",
+            "Daily non-negotiable routine"
+          ]
         }
       ],
 
-      "weeklyTemplate": {
-        "monday": "Rest / Mobility",
-        "tuesday": "Zone 2 Aerobic + Maximal Strength",
-        "wednesday": "Station Practice",
-        "thursday": "Zone 2 Aerobic",
-        "friday": "Rest / Mobility",
-        "saturday": "Tempo Steady State + Maximal Strength",
-        "sunday": "Run-Station Brick"
+      "archetypeSchedulingGuidance": {
+        "hardDays": "Zone 2 Aerobic (Tue/Thu) + Maximal Strength (Mon/Sat)",
+        "moderateDays": "Station Practice (Wed/Fri)",
+        "easyDays": "Sunday - optional easy movement or full rest",
+        "separationRules": "Hard strength and hard running: 24hrs minimum, Strength sessions: 48hrs apart"
       },
 
-      "progressionStrategy": "Volume-focused progression. Build training tolerance and movement quality. By Week 6, athlete should handle 6-7hrs/week comfortably with solid technique on all stations.",
+      "progressionGuidelines": "Focus on VOLUME. Build tolerance for training load. Week-to-week increase duration of Z2 runs and rounds of station practice. Load progression in strength is secondary to volume.",
 
-      "intensityDistribution": "70% easy, 20% moderate, 10% hard",
+      "targetIntensityDistribution": "75% easy, 20% moderate, 5% hard",
 
-      "adjustmentTriggers": [
-        "If morning HR elevated >10bpm: reduce volume 20%",
-        "If excessive soreness: add recovery day",
-        "If station technique poor: reduce volume, increase coaching focus"
+      "phaseExitCriteria": [
+        "Athlete can complete 60-70min Z2 runs comfortably",
+        "Competent technique on all 8 stations",
+        "Tolerating 6-7hrs training/week without excessive fatigue"
       ]
     },
 
@@ -271,106 +275,89 @@ OUTPUT FORMAT (JSON only):
           "archetypeName": "Threshold Intervals",
           "category": "Running",
           "frequency": "2x/week",
+          "sessionRole": "Quality - primary race-pace development",
           "rationaleForSelection": "Primary focus shifts to race-pace development. T1/T2 intervals critical for Hyrox performance.",
-          "intensityGuidelines": "T1: 4:37/km (HR 160-168), T2: 4:17/km (HR 170-180)",
-          "volumeProgression": "Week 8: 4x5min T1 → Week 14: 6x6min T1 + 4x3min T2",
+          "intensityBand": "Threshold (T1/T2 zones, 80-90% max HR)",
+          "progressionFocus": "Increase interval duration or count, reduce rest",
           "keyFocusPoints": [
-            "Hold target pace precisely",
-            "Recovery jogs critical",
-            "Prep for running under fatigue"
-          ],
-          "integrationNotes": "Tuesday (T1), Saturday (T2 or mixed)"
+            "Precise pace control at threshold",
+            "Lactate buffering development",
+            "Running economy at race intensity"
+          ]
         },
         {
           "archetypeName": "Long Run",
           "category": "Running",
           "frequency": "1x/week",
-          "rationaleForSelection": "Maintain aerobic base while intensity increases elsewhere",
-          "intensityGuidelines": "Zone 2, 60-70% effort",
-          "volumeProgression": "60-90min consistent",
+          "sessionRole": "Supporting - aerobic maintenance",
+          "rationaleForSelection": "Maintain aerobic base while intensity increases elsewhere. Critical for masters athlete.",
+          "intensityBand": "Zone 2 (60-70% effort)",
+          "progressionFocus": "Maintain 60-90min, no progression needed",
           "keyFocusPoints": [
-            "Easy effort",
-            "Aerobic maintenance",
-            "Mental endurance"
-          ],
-          "integrationNotes": "Sunday, recovery-focused"
+            "Easy aerobic effort",
+            "Active recovery from intensity",
+            "Mental endurance building"
+          ]
         },
         {
-          "archetypeName": "Maximal Strength",
+          "archetypeName": "Explosive Power",
           "category": "Strength",
           "frequency": "2x/week",
-          "rationaleForSelection": "Progress to heavier loads (4-6 rep range) for power development needed in stations",
-          "intensityGuidelines": "4-6 reps @ 78-85% 1RM",
-          "volumeProgression": "Week 8: 4x5 @ 78% → Week 14: 5x4 @ 85%",
+          "sessionRole": "Quality - power development",
+          "rationaleForSelection": "Progress to power development for sled pushes, wall ball efficiency, explosive station work.",
+          "intensityBand": "3-6 reps @ 75-85% 1RM, explosive intent",
+          "progressionFocus": "Load progression while maintaining speed",
           "keyFocusPoints": [
-            "Load progression",
-            "Power development",
-            "Maintain movement quality"
-          ],
-          "integrationNotes": "Wednesday/Friday, separated from threshold running by 48hrs"
+            "Rate of force development",
+            "Movement velocity",
+            "Power transfer to stations"
+          ]
         },
         {
           "archetypeName": "EMOM/AMRAP Circuits",
           "category": "Hybrid/Conditioning",
           "frequency": "2x/week",
-          "rationaleForSelection": "Build metabolic conditioning and station endurance with ALTERNATING run-station format",
-          "intensityGuidelines": "70-80% effort, work:rest 2:1 or 3:1",
-          "volumeProgression": "Week 8: 3 stations, 15min → Week 14: 5 stations, 24min",
+          "sessionRole": "Quality - metabolic conditioning + integration",
+          "rationaleForSelection": "Build race-specific conditioning with ALTERNATING run-station format. Progressive integration.",
+          "intensityBand": "75-85% effort",
+          "progressionFocus": "Add stations, reduce rest, increase density",
           "keyFocusPoints": [
-            "Transition speed",
-            "Sustain output under fatigue",
-            "Race-specific conditioning"
-          ],
-          "integrationNotes": "Include 400-800m runs BETWEEN stations. Thursday + Sunday."
+            "Transition efficiency",
+            "Sustain power under accumulating fatigue",
+            "Alternating format (run-station-run)"
+          ]
         },
         {
           "archetypeName": "Hyrox Simulation",
           "category": "Hybrid/Conditioning",
           "frequency": "1x every 2 weeks",
-          "rationaleForSelection": "Introduce partial Hyrox simulations (4-5 stations) at race pace",
-          "intensityGuidelines": "75-85% race effort",
-          "volumeProgression": "Week 8: 3 stations → Week 14: 5 stations",
+          "sessionRole": "Quality - race-specific preparation",
+          "rationaleForSelection": "Partial Hyrox simulations build race-specific fitness and mental preparation.",
+          "intensityBand": "80-90% race effort",
+          "progressionFocus": "Increase stations (3 → 5 over phase)",
           "keyFocusPoints": [
-            "Pacing practice",
+            "Race pacing practice",
             "Full race format (1km + station)",
-            "Mental preparation"
-          ],
-          "integrationNotes": "Replace Sunday Long Run every other week"
-        },
-        {
-          "archetypeName": "Aerobic Recovery",
-          "category": "Recovery",
-          "frequency": "1x/week",
-          "rationaleForSelection": "Active recovery needed with increased intensity",
-          "intensityGuidelines": "Very easy bike/row/swim, 20-30min",
-          "volumeProgression": "Consistent",
-          "keyFocusPoints": [
-            "Blood flow",
-            "Mental break from running",
-            "Active recovery"
-          ],
-          "integrationNotes": "Monday or Friday"
+            "Build confidence and identify limiters"
+          ]
         }
       ],
 
-      "weeklyTemplate": {
-        "monday": "Aerobic Recovery / Mobility",
-        "tuesday": "Threshold Intervals (T1)",
-        "wednesday": "Maximal Strength + Station Practice",
-        "thursday": "EMOM Circuit (run-station alternating)",
-        "friday": "Maximal Strength",
-        "saturday": "Threshold Intervals (T2)",
-        "sunday": "Long Run OR Hyrox Simulation (alternating weeks)"
+      "archetypeSchedulingGuidance": {
+        "hardDays": "Threshold Intervals (Tue/Sat) + EMOM Circuits (Thu)",
+        "moderateDays": "Explosive Power (Mon/Fri)",
+        "easyDays": "Long Run Sunday OR Hyrox Simulation (alternating)",
+        "separationRules": "Threshold running and Explosive Power: 48hrs minimum, EMOM and Threshold: 48hrs minimum"
       },
 
-      "progressionStrategy": "Intensity-focused progression. Shift from separated to alternating run-station format. Build race-specific fitness while managing accumulated fatigue.",
+      "progressionGuidelines": "Focus on INTENSITY. Build threshold capacity and power output. Volume is secondary. Increase interval count/duration OR reduce rest, not both simultaneously.",
 
-      "intensityDistribution": "60% easy, 25% moderate, 15% hard",
+      "targetIntensityDistribution": "65% easy, 20% moderate, 15% hard",
 
-      "adjustmentTriggers": [
-        "If threshold pace declining: add recovery week early",
-        "If injury niggles: reduce EMOM frequency",
-        "If HR not recovering: skip Hyrox Simulation week"
+      "phaseExitCriteria": [
+        "Can sustain T1 pace for 5-6min intervals",
+        "Comfortable with alternating run-station format",
+        "Power metrics improving in explosive lifts"
       ]
     }
   ],
@@ -378,8 +365,8 @@ OUTPUT FORMAT (JSON only):
   "overallStrategy": "Linear periodization with extended base for masters athlete. Progressive integration of running and stations from separated → alternating → full race simulation.",
 
   "keyConsiderations": [
-    "Age-appropriate recovery (48hrs between hard sessions)",
-    "Interference management (separate max strength from VO2 work)",
+    "Age-appropriate recovery (48-72hrs between hard sessions)",
+    "Interference management (separate max strength from VO2 work by 48hrs)",
     "Progressive station complexity to minimize injury risk",
     "Deload weeks strategically placed for adaptation"
   ]
