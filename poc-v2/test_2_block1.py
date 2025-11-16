@@ -47,7 +47,7 @@ def test_block1():
     base_phase = periodization_plan["phases"][0]
     console.print(f"\n[bold]Phase: {base_phase['phaseName']}[/bold]")
     console.print(f"  Weeks: {base_phase['startWeek']}-{base_phase['endWeek']}")
-    console.print(f"  Focus: {base_phase['focus']}")
+    console.print(f"  Focus: {base_phase['phaseFocus']}")
 
     # Setup athlete profile and configuration
     athlete_profile = {
@@ -132,7 +132,9 @@ def test_block1():
             "currentPhase": {
                 "phaseName": base_phase["phaseName"],
                 "phaseNumber": base_phase["phaseNumber"],
-                "sessionGuidelines": base_phase["sessionGuidelines"]
+                "selectedArchetypes": base_phase["selectedArchetypes"],
+                "archetypeSchedulingGuidance": base_phase["archetypeSchedulingGuidance"],
+                "progressionGuidelines": base_phase["progressionGuidelines"]
             },
             "athleteContext": {
                 "zone2HR": athlete_profile["physiologicalData"]["zone2HR"],
@@ -175,7 +177,7 @@ def test_block1():
         "phaseInfo": {
             "phaseName": base_phase["phaseName"],
             "weekNumber": 1,
-            "intensityGuideline": base_phase["intensityGuideline"]
+            "targetIntensityDistribution": base_phase["targetIntensityDistribution"]
         }
     }
 
@@ -191,7 +193,8 @@ def test_block1():
         "phaseInfo": {
             "phaseName": base_phase["phaseName"],
             "phaseNumber": base_phase["phaseNumber"],
-            "intensityGuideline": base_phase["intensityGuideline"]
+            "targetIntensityDistribution": base_phase["targetIntensityDistribution"],
+            "selectedArchetypes": base_phase["selectedArchetypes"]
         },
         "weeklyPlans": [integrated_week1],
         "athleteProfile": athlete_profile
