@@ -102,7 +102,9 @@ def test_periodization():
             if "selectedArchetypes" in phase:
                 console.print(f"    Selected Archetypes ({len(phase['selectedArchetypes'])} total):")
                 for archetype in phase["selectedArchetypes"]:
-                    console.print(f"      - {archetype.get('archetypeName')} ({archetype.get('sessionRole', 'N/A')}): {archetype.get('frequency', 'N/A')}")
+                    priority = archetype.get('priority', 'N/A')
+                    role = archetype.get('sessionRole', 'N/A')
+                    console.print(f"      - {archetype.get('archetypeName')} [{priority} priority] ({role})")
 
     return periodization_plan, global_context
 

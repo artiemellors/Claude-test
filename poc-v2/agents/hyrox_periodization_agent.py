@@ -190,7 +190,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "Zone 2 Aerobic",
           "category": "Running",
-          "frequency": "2x/week (uses available training days from user configuration)",
+          "priority": "High",
           "sessionRole": "Easy - primary aerobic development",
           "rationaleForSelection": "Critical for 41-year-old athlete to build aerobic base before intensity. Foundation for all subsequent work.",
           "intensityBand": "Zone 2 (reference athlete's calculated zones from Global Context)",
@@ -204,7 +204,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "Maximal Strength",
           "category": "Strength",
-          "frequency": "2x/week (uses available training days from user configuration)",
+          "priority": "High",
           "sessionRole": "Hard - foundational strength building",
           "rationaleForSelection": "Build foundational strength for Hyrox demands (sled push/pull, carries). Masters athlete needs strength work for injury prevention.",
           "intensityBand": "6-10 reps @ 65-75% 1RM (relative to athlete's estimated maxes)",
@@ -218,7 +218,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "Station Practice",
           "category": "Hybrid/Conditioning",
-          "frequency": "2x/week (uses available training days from user configuration)",
+          "priority": "Medium",
           "sessionRole": "Moderate - technical development",
           "rationaleForSelection": "Learn Hyrox station techniques while building work capacity. Separated from running to avoid interference.",
           "intensityBand": "Moderate effort (60-70% perceived exertion), generous rest",
@@ -232,7 +232,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "Mobility/Flexibility",
           "category": "Recovery",
-          "frequency": "Daily (independent of training day count)",
+          "priority": "High",
           "sessionRole": "Easy - injury prevention and movement quality",
           "rationaleForSelection": "Masters athlete requires consistent mobility work for injury prevention and movement quality.",
           "intensityBand": "Very low intensity (recovery zone)",
@@ -241,16 +241,33 @@ OUTPUT FORMAT (JSON only):
             "Hip mobility for running stride",
             "Shoulder health for overhead/carrying work",
             "Daily non-negotiable routine"
-          ]
+          ],
+          "schedulingNote": "Daily practice independent of main training sessions"
         }
       ],
 
       "archetypeSchedulingGuidance": {
-        "hardSessions": ["Maximal Strength"],
-        "moderateSessions": ["Station Practice"],
-        "easySessions": ["Zone 2 Aerobic", "Mobility/Flexibility"],
-        "weeklyDistribution": "2 hard days (Max Strength), 2 moderate days (Station Practice), remaining days easy (Zone 2 + Mobility)",
-        "separationRules": "Maximal Strength sessions: 48hrs apart minimum, Max Strength and Zone 2 running: 24hrs separation recommended but flexible"
+        "priorityDistribution": {
+          "highPriority": ["Zone 2 Aerobic", "Maximal Strength", "Mobility/Flexibility"],
+          "mediumPriority": ["Station Practice"],
+          "lowPriority": []
+        },
+        "intensityBalance": {
+          "hardSessions": ["Maximal Strength"],
+          "moderateSessions": ["Station Practice"],
+          "easySessions": ["Zone 2 Aerobic", "Mobility/Flexibility"]
+        },
+        "sessionAllocationGuidance": {
+          "3daysPerWeek": "Prioritize: 1x Max Strength, 1x Zone 2, 1x Station Practice. Mobility daily.",
+          "4daysPerWeek": "Prioritize: 2x Max Strength, 2x Zone 2. Add Station Practice if time allows. Mobility daily.",
+          "5daysPerWeek": "Fit all archetypes: 2x Zone 2, 2x Max Strength, 1x Station Practice. Mobility daily.",
+          "6daysPerWeek": "All archetypes with additional Zone 2 or Station Practice session. Mobility daily."
+        },
+        "separationRules": {
+          "maxStrengthSessions": "48hrs apart minimum",
+          "hardAndEasySeparation": "Max Strength and Zone 2 running: 24hrs recommended but flexible",
+          "consecutiveDays": "Avoid back-to-back hard sessions (Max Strength on consecutive days)"
+        }
       },
 
       "progressionGuidelines": "Focus on VOLUME. Build tolerance for training load. Week-to-week increase duration of Z2 runs and rounds of station practice. Load progression in strength is secondary to volume.",
@@ -284,7 +301,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "Threshold Intervals",
           "category": "Running",
-          "frequency": "2x/week (uses available training days from user configuration)",
+          "priority": "High",
           "sessionRole": "Hard - primary race-pace development",
           "rationaleForSelection": "Primary focus shifts to race-pace development. T1/T2 intervals critical for Hyrox performance.",
           "intensityBand": "Zones 3-4 (Threshold, reference athlete's calculated zones)",
@@ -298,7 +315,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "Long Run",
           "category": "Running",
-          "frequency": "1x/week (uses available training days from user configuration)",
+          "priority": "Medium",
           "sessionRole": "Easy - aerobic maintenance",
           "rationaleForSelection": "Maintain aerobic base while intensity increases elsewhere. Critical for masters athlete.",
           "intensityBand": "Zone 2 (reference athlete's calculated zones)",
@@ -312,7 +329,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "Explosive Power",
           "category": "Strength",
-          "frequency": "2x/week (uses available training days from user configuration)",
+          "priority": "High",
           "sessionRole": "Hard - power development",
           "rationaleForSelection": "Progress to power development for sled pushes, wall ball efficiency, explosive station work.",
           "intensityBand": "3-6 reps @ 75-85% 1RM (relative to athlete's estimated maxes)",
@@ -326,7 +343,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "EMOM/AMRAP Circuits",
           "category": "Hybrid/Conditioning",
-          "frequency": "2x/week (uses available training days from user configuration)",
+          "priority": "High",
           "sessionRole": "Moderate - metabolic conditioning + integration",
           "rationaleForSelection": "Build race-specific conditioning with ALTERNATING run-station format. Progressive integration.",
           "intensityBand": "Moderate-high effort (75-85% perceived exertion)",
@@ -340,7 +357,7 @@ OUTPUT FORMAT (JSON only):
         {
           "archetypeName": "Hyrox Simulation",
           "category": "Hybrid/Conditioning",
-          "frequency": "1x every 2 weeks (alternates with Long Run)",
+          "priority": "Medium",
           "sessionRole": "Hard - race-specific preparation",
           "rationaleForSelection": "Partial Hyrox simulations build race-specific fitness and mental preparation.",
           "intensityBand": "High effort (80-90% race intensity)",
@@ -349,16 +366,33 @@ OUTPUT FORMAT (JSON only):
             "Race pacing practice",
             "Full race format (1km + station)",
             "Build confidence and identify limiters"
-          ]
+          ],
+          "schedulingNote": "Use bi-weekly, alternating with Long Run to manage fatigue"
         }
       ],
 
       "archetypeSchedulingGuidance": {
-        "hardSessions": ["Threshold Intervals", "Explosive Power", "Hyrox Simulation"],
-        "moderateSessions": ["EMOM/AMRAP Circuits"],
-        "easySessions": ["Long Run"],
-        "weeklyDistribution": "2 hard days (Threshold Intervals on separate days) + 1 hard day (Explosive Power OR Hyrox Simulation), 2 moderate days (EMOM Circuits), 1-2 easy days (Long Run on non-simulation weeks)",
-        "separationRules": "Threshold Intervals and Explosive Power: 48hrs minimum, EMOM and Threshold: 48hrs minimum, Hyrox Simulation replaces Long Run every other week"
+        "priorityDistribution": {
+          "highPriority": ["Threshold Intervals", "Explosive Power", "EMOM/AMRAP Circuits"],
+          "mediumPriority": ["Long Run", "Hyrox Simulation"],
+          "lowPriority": []
+        },
+        "intensityBalance": {
+          "hardSessions": ["Threshold Intervals", "Explosive Power", "Hyrox Simulation"],
+          "moderateSessions": ["EMOM/AMRAP Circuits"],
+          "easySessions": ["Long Run"]
+        },
+        "sessionAllocationGuidance": {
+          "3daysPerWeek": "Prioritize: 2x Threshold Intervals, 1x EMOM Circuit. Reduce Explosive Power frequency or combine with EMOM.",
+          "4daysPerWeek": "Add: 1x Explosive Power to 3-day structure. Long Run on 4th day if recovery allows.",
+          "5daysPerWeek": "Fit all high-priority archetypes: 2x Threshold, 2x Explosive Power, 2x EMOM, 1x Long Run OR Hyrox Simulation (alternating).",
+          "6daysPerWeek": "All archetypes with additional Long Run or increase Threshold frequency."
+        },
+        "separationRules": {
+          "thresholdAndPower": "48hrs minimum between Threshold Intervals and Explosive Power",
+          "emomAndThreshold": "48hrs minimum between EMOM Circuits and Threshold Intervals",
+          "simulationFrequency": "Bi-weekly, alternates with Long Run to manage fatigue and allow adequate recovery"
+        }
       },
 
       "progressionGuidelines": "Focus on INTENSITY. Build threshold capacity and power output. Volume is secondary. Increase interval count/duration OR reduce rest, not both simultaneously.",
