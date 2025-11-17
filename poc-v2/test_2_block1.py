@@ -112,83 +112,93 @@ def test_block1():
     se_coach = StrengthEnduranceCoach()
     combo_coach = HyroxComboCoach()
 
-    # Process Week 1 as example (in production, loop through all weeks)
-    week1_structure = skeleton.get("weeklyStructure", [])[0] if skeleton.get("weeklyStructure") else None
+    # Get all weekly structures from skeleton
+    weekly_structures = skeleton.get("weeklyStructure", [])
 
-    if not week1_structure:
+    if not weekly_structures:
         console.print("[red]✗ No weekly structure found in skeleton[/red]")
         return None
 
-    console.print(f"\n[cyan]Designing Week 1 sessions:[/cyan]")
+    # Process ALL weeks in the block (Base phase: weeks 1-6)
+    all_integrated_weeks = []
+    previous_week = None
 
-    week1_workouts = {}
-    previous_week = None  # First week has no previous
+    for week_idx, week_structure in enumerate(weekly_structures):
+        week_number = week_idx + 1
+        console.print(f"\n[cyan]Designing Week {week_number} sessions:[/cyan]")
 
-    for session in week1_structure.get("sessions", []):
-        day = session["dayOfWeek"]
-        session_type = session["sessionType"]
+        week_workouts = {}
 
-        console.print(f"  - {day.capitalize()}: {session_type}")
+        for session in week_structure.get("sessions", []):
+            day = session["dayOfWeek"]
+            session_type = session["sessionType"]
 
-        # Build input for specialist coach
-        coach_input = {
-            "weekNumber": 1,
-            "sessionFocus": session["focus"],
-            "currentPhase": {
+            console.print(f"  - {day.capitalize()}: {session_type}")
+
+            # Build input for specialist coach
+            coach_input = {
+                "weekNumber": week_number,
+                "sessionFocus": session["focus"],
+                "currentPhase": {
+                    "phaseName": base_phase["phaseName"],
+                    "phaseNumber": base_phase["phaseNumber"],
+                    "selectedArchetypes": base_phase["selectedArchetypes"],
+                    "archetypeSchedulingGuidance": base_phase["archetypeSchedulingGuidance"],
+                    "progressionGuidelines": base_phase["progressionGuidelines"]
+                },
+                "athleteContext": {
+                    "zone2HR": athlete_profile["physiologicalData"]["zone2HR"],
+                    "thresholdPaces": athlete_profile["physiologicalData"]["thresholdPaces"],
+                    "equipment": athlete_profile["equipment"]["gym"]["equipment"],
+                    "estimatedMaxes": athlete_profile.get("estimatedMaxes", {})
+                },
+                "previousWeek": previous_week
+            }
+
+            # Add station focus for SE sessions
+            if session_type == "strengthEndurance":
+                coach_input["stationFocus"] = ["skierg", "wall_balls", "rowing"]
+
+            # Route to appropriate coach
+            if session_type == "runningQuality":
+                workout = running_coach.execute(coach_input)
+            elif session_type == "strengthEndurance":
+                workout = se_coach.execute(coach_input)
+            elif session_type == "hyroxCombo":
+                coach_input["athleteContext"]["targetRacePace"] = "5:00/km"
+                coach_input["athleteContext"]["zone2Pace"] = "5:30/km"
+                workout = combo_coach.execute(coach_input)
+            else:
+                workout = {"placeholder": f"{session_type} workout"}
+
+            week_workouts[day] = {
+                "sessionType": session_type,
+                "workout": workout
+            }
+
+        console.print(f"[green]✓ Week {week_number} workouts designed[/green]")
+
+        # Step 3: Integration for this week
+        integration_input = {
+            "weekNumber": week_number,
+            "weeklyStructure": week_workouts,
+            "phaseInfo": {
                 "phaseName": base_phase["phaseName"],
-                "phaseNumber": base_phase["phaseNumber"],
-                "selectedArchetypes": base_phase["selectedArchetypes"],
-                "archetypeSchedulingGuidance": base_phase["archetypeSchedulingGuidance"],
-                "progressionGuidelines": base_phase["progressionGuidelines"]
-            },
-            "athleteContext": {
-                "zone2HR": athlete_profile["physiologicalData"]["zone2HR"],
-                "thresholdPaces": athlete_profile["physiologicalData"]["thresholdPaces"],
-                "equipment": athlete_profile["equipment"]["gym"]["equipment"],
-                "estimatedMaxes": athlete_profile.get("estimatedMaxes", {})
-            },
-            "previousWeek": previous_week
+                "weekNumber": week_number,
+                "targetIntensityDistribution": base_phase["targetIntensityDistribution"]
+            }
         }
 
-        # Add station focus for SE sessions
-        if session_type == "strengthEndurance":
-            coach_input["stationFocus"] = ["skierg", "wall_balls", "rowing"]
+        integration_agent = IntegrationAgent()
+        integrated_week = integration_agent.execute(integration_input)
+        all_integrated_weeks.append(integrated_week)
 
-        # Route to appropriate coach
-        if session_type == "runningQuality":
-            workout = running_coach.execute(coach_input)
-        elif session_type == "strengthEndurance":
-            workout = se_coach.execute(coach_input)
-        elif session_type == "hyroxCombo":
-            coach_input["athleteContext"]["targetRacePace"] = "5:00/km"
-            coach_input["athleteContext"]["zone2Pace"] = "5:30/km"
-            workout = combo_coach.execute(coach_input)
-        else:
-            workout = {"placeholder": f"{session_type} workout"}
+        # Store this week for next week's progression
+        previous_week = integrated_week
 
-        week1_workouts[day] = {
-            "sessionType": session_type,
-            "workout": workout
-        }
+        console.print(f"[green]✓ Week {week_number} integrated[/green]")
 
-    console.print("[green]✓ Week 1 workouts designed[/green]")
-
-    # Step 3: Integration
-    console.print("\n[bold yellow]Step 3: Integrating Week 1 into Complete Plan[/bold yellow]")
-
-    integration_input = {
-        "weekNumber": 1,
-        "weeklyStructure": week1_workouts,
-        "phaseInfo": {
-            "phaseName": base_phase["phaseName"],
-            "weekNumber": 1,
-            "targetIntensityDistribution": base_phase["targetIntensityDistribution"]
-        }
-    }
-
-    integration_agent = IntegrationAgent()
-    integrated_week1 = integration_agent.execute(integration_input)
-    console.print("[green]✓ Week 1 integrated[/green]")
+    console.print(f"\n[bold green]✓ All {len(all_integrated_weeks)} weeks designed and integrated[/bold green]")
 
     # Step 4: Validation
     console.print("\n[bold yellow]Step 4: Validating Training Block[/bold yellow]")
@@ -201,7 +211,7 @@ def test_block1():
             "targetIntensityDistribution": base_phase["targetIntensityDistribution"],
             "selectedArchetypes": base_phase["selectedArchetypes"]
         },
-        "weeklyPlans": [integrated_week1],
+        "weeklyPlans": all_integrated_weeks,
         "athleteProfile": athlete_profile
     }
 
@@ -214,7 +224,7 @@ def test_block1():
 
     outputs = {
         "skeleton": skeleton,
-        "week1_integrated": integrated_week1,
+        "all_weeks": all_integrated_weeks,
         "validation": validation_result
     }
 
@@ -228,12 +238,13 @@ def test_block1():
     console.print("\n[bold cyan]Block 1 Summary:[/bold cyan]")
     console.print(f"  Phase: {base_phase['phaseName']}")
     console.print(f"  Duration: {base_phase['durationWeeks']} weeks")
+    console.print(f"  Total weeks generated: {len(all_integrated_weeks)}")
     console.print(f"  Sessions per week: 5")
     console.print(f"  Validation: {validation_result.get('validationStatus', 'UNKNOWN')}")
 
-    if "weeklyLoadMetrics" in integrated_week1:
-        metrics = integrated_week1["weeklyLoadMetrics"]
-        console.print(f"\n  Week 1 Metrics:")
+    if all_integrated_weeks and "weeklyLoadMetrics" in all_integrated_weeks[0]:
+        console.print(f"\n  Sample Metrics (Week 1):")
+        metrics = all_integrated_weeks[0]["weeklyLoadMetrics"]
         console.print(f"    Total time: {metrics.get('totalTrainingMinutes', 0)} minutes")
         console.print(f"    Rest days: {metrics.get('restDays', 0)}")
 

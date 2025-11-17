@@ -135,21 +135,21 @@ def test_block2():
     se_coach = StrengthEnduranceCoach()
     combo_coach = HyroxComboCoach()
 
-    # Process Week 7 (first week of Build phase)
-    week7_structure = skeleton.get("weeklyStructure", [])[0] if skeleton.get("weeklyStructure") else None
+    # Get all weekly structures from skeleton
+    weekly_structures = skeleton.get("weeklyStructure", [])
 
-    if not week7_structure:
+    if not weekly_structures:
         console.print("[red]✗ No weekly structure found in skeleton[/red]")
         return None
 
-    console.print(f"\n[cyan]Designing Week 7 sessions (with progression from Base phase):[/cyan]")
-
-    week7_workouts = {}
-
-    # Extract Week 6 data from Block 1 for progression
+    # Extract Week 6 data from Block 1 for initial progression
     previous_week_data = None
-    if block1 and "week1_integrated" in block1:
-        # In reality, we'd extract Week 6, but for demo we'll use Week 1 structure
+    if block1 and "all_weeks" in block1 and len(block1["all_weeks"]) >= 6:
+        # Use the last week of Base phase for progression
+        previous_week_data = block1["all_weeks"][-1]
+        console.print(f"[cyan]Using Week 6 from Base phase for progression baseline[/cyan]")
+    elif block1 and "week1_integrated" in block1:
+        # Fallback to week1 if old format
         previous_week_data = {
             "weekNumber": 6,
             "session": {
@@ -157,75 +157,93 @@ def test_block2():
             }
         }
 
-    for session in week7_structure.get("sessions", []):
-        day = session["dayOfWeek"]
-        session_type = session["sessionType"]
+    # Process ALL weeks in the Build phase (weeks 7-12)
+    all_integrated_weeks = []
 
-        console.print(f"  - {day.capitalize()}: {session_type}")
+    for week_idx, week_structure in enumerate(weekly_structures):
+        week_number = build_phase["startWeek"] + week_idx  # 7, 8, 9, etc.
+        console.print(f"\n[cyan]Designing Week {week_number} sessions (Build Phase):[/cyan]")
 
-        # Build input for specialist coach
-        coach_input = {
-            "weekNumber": 7,
-            "sessionFocus": session["focus"],
-            "currentPhase": {
+        week_workouts = {}
+
+        for session in week_structure.get("sessions", []):
+            day = session["dayOfWeek"]
+            session_type = session["sessionType"]
+
+            console.print(f"  - {day.capitalize()}: {session_type}")
+
+            # Build input for specialist coach
+            coach_input = {
+                "weekNumber": week_number,
+                "sessionFocus": session["focus"],
+                "currentPhase": {
+                    "phaseName": build_phase["phaseName"],
+                    "phaseNumber": build_phase["phaseNumber"],
+                    "sessionGuidelines": build_phase["sessionGuidelines"]
+                },
+                "athleteContext": {
+                    "zone2HR": athlete_profile["physiologicalData"]["zone2HR"],
+                    "thresholdPaces": athlete_profile["physiologicalData"]["thresholdPaces"],
+                    "equipment": athlete_profile["equipment"]["gym"]["equipment"],
+                    "estimatedMaxes": athlete_profile.get("estimatedMaxes", {})
+                },
+                "previousWeek": previous_week_data
+            }
+
+            # Add station focus for SE sessions
+            if session_type == "strengthEndurance":
+                coach_input["stationFocus"] = ["skierg", "sled_push", "rowing", "wall_balls"]
+
+            # Route to appropriate coach
+            if session_type == "runningQuality":
+                if week_number == 7:
+                    console.print("    → Running coach applying threshold intervals (phase shift!)")
+                workout = running_coach.execute(coach_input)
+            elif session_type == "maxStrength":
+                if week_number == 7:
+                    console.print("    → Max Strength coach designing 3-5 rep work @ 80-87%")
+                workout = max_strength_coach.execute(coach_input)
+            elif session_type == "strengthEndurance":
+                if week_number == 7:
+                    console.print("    → SE coach adding running integration (alternating format)")
+                workout = se_coach.execute(coach_input)
+            elif session_type == "hyroxCombo":
+                if week_number == 7:
+                    console.print("    → HYROX coach using alternating format with race pace")
+                coach_input["athleteContext"]["targetRacePace"] = "5:00/km"
+                coach_input["athleteContext"]["zone2Pace"] = "5:30/km"
+                workout = combo_coach.execute(coach_input)
+            else:
+                workout = {"placeholder": f"{session_type} workout"}
+
+            week_workouts[day] = {
+                "sessionType": session_type,
+                "workout": workout
+            }
+
+        console.print(f"[green]✓ Week {week_number} workouts designed with phase-appropriate intensity[/green]")
+
+        # Step 3: Integration for this week
+        integration_input = {
+            "weekNumber": week_number,
+            "weeklyStructure": week_workouts,
+            "phaseInfo": {
                 "phaseName": build_phase["phaseName"],
-                "phaseNumber": build_phase["phaseNumber"],
-                "sessionGuidelines": build_phase["sessionGuidelines"]
-            },
-            "athleteContext": {
-                "zone2HR": athlete_profile["physiologicalData"]["zone2HR"],
-                "thresholdPaces": athlete_profile["physiologicalData"]["thresholdPaces"],
-                "equipment": athlete_profile["equipment"]["gym"]["equipment"],
-                "estimatedMaxes": athlete_profile.get("estimatedMaxes", {})
-            },
-            "previousWeek": previous_week_data
+                "weekNumber": week_number,
+                "intensityGuideline": build_phase["intensityGuideline"]
+            }
         }
 
-        # Add station focus for SE sessions
-        if session_type == "strengthEndurance":
-            coach_input["stationFocus"] = ["skierg", "sled_push", "rowing", "wall_balls"]
+        integration_agent = IntegrationAgent()
+        integrated_week = integration_agent.execute(integration_input)
+        all_integrated_weeks.append(integrated_week)
 
-        # Route to appropriate coach
-        if session_type == "runningQuality":
-            console.print("    → Running coach applying threshold intervals (phase shift!)")
-            workout = running_coach.execute(coach_input)
-        elif session_type == "maxStrength":
-            console.print("    → Max Strength coach designing 3-5 rep work @ 80-87%")
-            workout = max_strength_coach.execute(coach_input)
-        elif session_type == "strengthEndurance":
-            console.print("    → SE coach adding running integration (alternating format)")
-            workout = se_coach.execute(coach_input)
-        elif session_type == "hyroxCombo":
-            console.print("    → HYROX coach using alternating format with race pace")
-            coach_input["athleteContext"]["targetRacePace"] = "5:00/km"
-            coach_input["athleteContext"]["zone2Pace"] = "5:30/km"
-            workout = combo_coach.execute(coach_input)
-        else:
-            workout = {"placeholder": f"{session_type} workout"}
+        # Store this week for next week's progression
+        previous_week_data = integrated_week
 
-        week7_workouts[day] = {
-            "sessionType": session_type,
-            "workout": workout
-        }
+        console.print(f"[green]✓ Week {week_number} integrated[/green]")
 
-    console.print("[green]✓ Week 7 workouts designed with phase-appropriate intensity[/green]")
-
-    # Step 3: Integration
-    console.print("\n[bold yellow]Step 3: Integrating Week 7 into Complete Plan[/bold yellow]")
-
-    integration_input = {
-        "weekNumber": 7,
-        "weeklyStructure": week7_workouts,
-        "phaseInfo": {
-            "phaseName": build_phase["phaseName"],
-            "weekNumber": 7,
-            "intensityGuideline": build_phase["intensityGuideline"]
-        }
-    }
-
-    integration_agent = IntegrationAgent()
-    integrated_week7 = integration_agent.execute(integration_input)
-    console.print("[green]✓ Week 7 integrated[/green]")
+    console.print(f"\n[bold green]✓ All {len(all_integrated_weeks)} weeks of Build phase designed and integrated[/bold green]")
 
     # Step 4: Validation
     console.print("\n[bold yellow]Step 4: Validating Training Block[/bold yellow]")
@@ -237,7 +255,7 @@ def test_block2():
             "phaseNumber": build_phase["phaseNumber"],
             "intensityGuideline": build_phase["intensityGuideline"]
         },
-        "weeklyPlans": [integrated_week7],
+        "weeklyPlans": all_integrated_weeks,
         "athleteProfile": athlete_profile
     }
 
@@ -250,7 +268,7 @@ def test_block2():
 
     outputs = {
         "skeleton": skeleton,
-        "week7_integrated": integrated_week7,
+        "all_weeks": all_integrated_weeks,
         "validation": validation_result,
         "phaseTransition": {
             "from": "Base Building (Weeks 1-6)",
@@ -274,12 +292,13 @@ def test_block2():
     console.print("\n[bold cyan]Block 2 Summary:[/bold cyan]")
     console.print(f"  Phase: {build_phase['phaseName']}")
     console.print(f"  Duration: {build_phase['durationWeeks']} weeks")
+    console.print(f"  Total weeks generated: {len(all_integrated_weeks)}")
     console.print(f"  Sessions per week: 5")
     console.print(f"  Validation: {validation_result.get('validationStatus', 'UNKNOWN')}")
 
-    if "weeklyLoadMetrics" in integrated_week7:
-        metrics = integrated_week7["weeklyLoadMetrics"]
-        console.print(f"\n  Week 7 Metrics:")
+    if all_integrated_weeks and "weeklyLoadMetrics" in all_integrated_weeks[0]:
+        console.print(f"\n  Sample Metrics (Week 7 - first week of Build):")
+        metrics = all_integrated_weeks[0]["weeklyLoadMetrics"]
         console.print(f"    Total time: {metrics.get('totalTrainingMinutes', 0)} minutes")
         console.print(f"    Hard sessions: {metrics.get('hardSessions', 0)}")
         console.print(f"    Intensity distribution: {metrics.get('intensityDistribution', {})}")
